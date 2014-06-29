@@ -10,10 +10,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -23,6 +27,7 @@ public class MainActivity extends Activity {
 	private ListView actionsListView;
 	private SimpleAdapter myAdapter;
 	private List<Map<String, String>> actionsList;
+	private ProgressDialog progress;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,12 @@ public class MainActivity extends Activity {
 //		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
 //		actionsListView.setAdapter(myAdapter);
 		
+		progress = new ProgressDialog(this);
+		progress.setTitle("Učitavanje podataka...");
+		
 		HSMSClient client = new HSMSClient(this);
 		Thread thr = new Thread(client);
+		progress.show();
 		thr.start();
 	}
 	
@@ -65,6 +74,9 @@ public class MainActivity extends Activity {
 	}
 	
 	private void populateActionsList() {
+		if(actionsArray == null) {
+			return;
+		}
 		for(JSONObject obj : actionsArray) {
 			actionsList.add(createAction(obj));
 		}
@@ -93,7 +105,7 @@ public class MainActivity extends Activity {
 		return map;
 	}
 	
-	public void setMyText(final String text, final int i) {
+	public void receiveData(final String text) {
 		new Thread() {
 			public void run() {
 				MainActivity.this.runOnUiThread(new Runnable() {
@@ -122,5 +134,22 @@ public class MainActivity extends Activity {
 		
 		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
 		actionsListView.setAdapter(myAdapter);
+		progress.dismiss();
+		
+		actionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				
+				try {
+					Toast.makeText(MainActivity.this, actionsArray[arg2].getString("num")+" "+actionsArray[arg2].getString("price")+" - "+actionsArray[arg2].getString("desc"), Toast.LENGTH_SHORT).show();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

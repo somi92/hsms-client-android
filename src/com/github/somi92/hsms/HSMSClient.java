@@ -2,7 +2,6 @@ package com.github.somi92.hsms;
 
 import java.io.IOException;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -46,14 +45,14 @@ public class HSMSClient extends Activity implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			parent.setMyText(e.getMessage()+" IO",0);
+			parent.receiveData(e.getMessage()+" IO");
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			parent.setMyText(e.getMessage()+" XML",0);
+			parent.receiveData(e.getMessage()+" XML");
 		} catch (Exception e) {
 			// TODO: handle exception
-			parent.setMyText(e.getMessage()+" EXC",0);
+			parent.receiveData(e.getMessage()+" EXC");
 		}
 		
 		try {
@@ -66,14 +65,14 @@ public class HSMSClient extends Activity implements Runnable {
 //					JSONObject jo = (JSONObject) a.get(i);
 //					parent.setMyText(jo.toString(),(i+1));
 //				}
-				parent.setMyText(obj.toString(),0);
+				parent.receiveData(obj.toString());
 			} else {
-				parent.setMyText("SOAP respones: "+"NULL!",0);
+				parent.receiveData("SOAP respones: "+"NULL!");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			parent.setMyText(e.getMessage()+" Error",0);
+			parent.receiveData(e.getMessage()+" Error");
 		}
 	}
 
