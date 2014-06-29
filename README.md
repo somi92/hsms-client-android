@@ -1,0 +1,2 @@
+hsms-client-android
+===================
