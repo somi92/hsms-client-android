@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
@@ -61,7 +62,15 @@ public class HSMSClient extends Activity implements Runnable {
 		}
 		
 		try {
-			SoapObject result = (SoapObject)envelope.bodyIn;
+//			SoapObject result = (SoapObject)envelope.bodyIn;
+			SoapObject result = null;
+			String message = "";
+			
+			if(envelope.bodyIn instanceof SoapFault) {
+				message = ((SoapFault)envelope.bodyIn).faultstring;
+			} else {
+				result = (SoapObject)envelope.bodyIn;
+			}
 			
 			if(result != null) {
 				JSONObject obj = new JSONObject(result.getProperty(0).toString());
@@ -72,7 +81,7 @@ public class HSMSClient extends Activity implements Runnable {
 //				}
 				parent.receiveData(obj.toString());
 			} else {
-				parent.receiveData("SOAP respones: "+"NULL!");
+				parent.receiveData("SOAP respones: "+"NULL!"+" "+message);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
 	
 	private void populateActionsList() {
 		if(actionsArray == null) {
-			Toast.makeText(this, "Aplikacija ne može da preuzme podatke. Proverite vašu internet vezu i pokušajte ponovo.", Toast.LENGTH_LONG).show();
+//			Toast.makeText(this, "Aplikacija ne može da preuzme podatke. Proverite vašu internet vezu i pokušajte ponovo.", Toast.LENGTH_LONG).show();
 			return;
 		}
 		for(JSONObject obj : actionsArray) {
@@ -145,6 +145,7 @@ public class MainActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 //						t.setText(text);
+						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 						setData(text);
