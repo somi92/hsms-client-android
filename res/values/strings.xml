@@ -3,5 +3,6 @@
 
     <string name="app_name">Humanitarni SMS</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_refresh">Osveži</string>
 
 </resources>

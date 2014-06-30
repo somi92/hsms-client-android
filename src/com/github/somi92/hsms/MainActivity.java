@@ -11,7 +11,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -41,7 +45,7 @@ public class MainActivity extends Activity {
 //		
 //		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
 //		actionsListView.setAdapter(myAdapter);
-		
+//		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 		progress = new ProgressDialog(this);
 		progress.setTitle("Učitavanje podataka...");
 		
@@ -73,8 +77,35 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_activity_actions, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+			case R.id.action_refresh: {
+//				this.recreate();
+				Intent intent = getIntent();
+				intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+				finish();
+				startActivity(intent);
+				overridePendingTransition(0,0);
+				return true;
+			}
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+	}
+	
 	private void populateActionsList() {
 		if(actionsArray == null) {
+			Toast.makeText(this, "Aplikacija ne može da preuzme podatke. Proverite vašu internet vezu i pokušajte ponovo.", Toast.LENGTH_LONG).show();
 			return;
 		}
 		for(JSONObject obj : actionsArray) {
@@ -135,6 +166,10 @@ public class MainActivity extends Activity {
 		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
 		actionsListView.setAdapter(myAdapter);
 		progress.dismiss();
+		
+		if(actionsList.size()>0) {
+			Toast.makeText(this, "Broj preuzetih stavki: "+actionsList.size(), Toast.LENGTH_SHORT).show();
+		}
 		
 		actionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
