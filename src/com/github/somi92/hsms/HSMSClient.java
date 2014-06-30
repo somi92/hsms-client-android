@@ -13,10 +13,15 @@ import android.app.Activity;
 
 public class HSMSClient extends Activity implements Runnable {
 	
-	private static String SOAP_ACTION = "http://192.168.1.181/soap/ActionList/listAllActions";
-	private static String NAMESPACE = "http://192.168.1.181/soap/ActionList/";
+//	private static String SOAP_ACTION = "http://192.168.1.181/soap/ActionList/listAllActions";
+//	private static String NAMESPACE = "http://192.168.1.181/soap/ActionList/";
+//	private static String METHOD_NAME = "listAllActions";
+//	private static String URL = "http://192.168.1.181/HSMSWebService/index.php";
+	
+	private static String SOAP_ACTION = "http://www.somi92.student.elab.fon.bg.ac.rs/soap/ActionList/listAllActions";
+	private static String NAMESPACE = "http://www.somi92.student.elab.fon.bg.ac.rs/soap/ActionList/";
 	private static String METHOD_NAME = "listAllActions";
-	private static String URL = "http://192.168.1.181/HSMSWebService/index.php";
+	private static String URL = "http://www.somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
 	
 	private MainActivity parent;
 	

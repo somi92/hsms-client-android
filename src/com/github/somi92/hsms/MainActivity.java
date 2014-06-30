@@ -145,6 +145,8 @@ public class MainActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 //						t.setText(text);
+						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 						setData(text);
 						parseJSONData();
 						initializeList();
