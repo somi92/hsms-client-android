@@ -79,9 +79,6 @@ public class HSMSClient extends Activity implements Runnable {
 				result = (SoapObject)envelope.bodyIn;
 			}
 			
-			 Log.e("dump Request: " ,androidHttpTransport.requestDump.toString());
-			 Log.e("dump response: " ,androidHttpTransport.responseDump.toString());
-			
 			if(result != null) {
 				JSONObject obj = new JSONObject(result.getProperty(0).toString());
 //				JSONArray a = obj.getJSONArray("action");
@@ -93,6 +90,9 @@ public class HSMSClient extends Activity implements Runnable {
 			} else {
 				parent.receiveData("SOAP respones: "+"NULL!"+" "+message);
 			}
+
+			 Log.e("dump Request: " ,androidHttpTransport.requestDump.toString());
+			 Log.e("dump response: " ,androidHttpTransport.responseDump.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
