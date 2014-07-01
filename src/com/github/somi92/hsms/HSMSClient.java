@@ -11,6 +11,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
+import android.util.Log;
 
 public class HSMSClient extends Activity implements Runnable {
 	
@@ -25,8 +26,8 @@ public class HSMSClient extends Activity implements Runnable {
 	private static String URL = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
 	
 //	private static String SOAP_ACTION = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php#listAllActions";
-//	private static String NAMESPACE = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
-//	private static String METHOD_NAME = "#listAllActions";
+//	private static String NAMESPACE = "urn:ActionList";
+//	private static String METHOD_NAME = "listAllActions";
 //	private static String URL = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
 	
 	private MainActivity parent;
@@ -50,6 +51,7 @@ public class HSMSClient extends Activity implements Runnable {
 		envelope.setOutputSoapObject(soapRequest);
 		
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+		androidHttpTransport.debug = true;
 		
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -76,6 +78,9 @@ public class HSMSClient extends Activity implements Runnable {
 			} else {
 				result = (SoapObject)envelope.bodyIn;
 			}
+			
+			 Log.e("dump Request: " ,androidHttpTransport.requestDump.toString());
+			 Log.e("dump response: " ,androidHttpTransport.responseDump.toString());
 			
 			if(result != null) {
 				JSONObject obj = new JSONObject(result.getProperty(0).toString());
