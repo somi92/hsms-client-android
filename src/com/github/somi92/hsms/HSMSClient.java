@@ -10,6 +10,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
+import android.util.Log;
 
 public class HSMSClient extends Activity implements Runnable {
 	
@@ -69,6 +70,10 @@ public class HSMSClient extends Activity implements Runnable {
 			} else {
 				parent.receiveData("SOAP respones: "+"NULL!");
 			}
+			
+			Log.e("dump Request: " ,androidHttpTransport.requestDump);
+			Log.e("dump response: " ,androidHttpTransport.responseDump);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
