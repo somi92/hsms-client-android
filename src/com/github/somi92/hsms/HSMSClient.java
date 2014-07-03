@@ -71,7 +71,7 @@ public class HSMSClient extends Activity implements Runnable {
 				parent.receiveData("SOAP respones: "+"NULL!");
 			}
 			
-			Log.e("dump Request: " ,androidHttpTransport.requestDump);
+			Log.d("dump Request: " ,androidHttpTransport.requestDump);
 			Log.e("dump response: " ,androidHttpTransport.responseDump);
 			
 		} catch (Exception e) {
