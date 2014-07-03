@@ -55,6 +55,7 @@ public class HSMSClient extends Activity implements Runnable {
 		
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,6 +63,7 @@ public class HSMSClient extends Activity implements Runnable {
 		} catch (XmlPullParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.e("XML greska", e.getMessage());
 			parent.receiveData(e.getMessage()+" XML");
 		} catch (Exception e) {
 			// TODO: handle exception
