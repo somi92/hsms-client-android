@@ -40,6 +40,7 @@ public class HSMSClient extends Activity implements Runnable {
 		envelope.setOutputSoapObject(soapRequest);
 		
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+		androidHttpTransport.debug = true;
 		
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -71,7 +72,7 @@ public class HSMSClient extends Activity implements Runnable {
 				parent.receiveData("SOAP respones: "+"NULL!");
 			}
 			
-			Log.d("dump Request: " ,androidHttpTransport.requestDump);
+			Log.e("dump Request: " ,androidHttpTransport.requestDump);
 			Log.e("dump response: " ,androidHttpTransport.responseDump);
 			
 		} catch (Exception e) {
