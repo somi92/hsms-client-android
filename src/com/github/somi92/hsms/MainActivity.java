@@ -20,14 +20,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	private String data;
 	private JSONObject[] actionsArray;
-	private TextView t;
 	private ListView actionsListView;
 	private SimpleAdapter myAdapter;
 	private List<Map<String, String>> actionsList;
@@ -37,15 +35,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-//		t = (TextView) findViewById(R.id.txtView);
-		
-//		actionsListView = (ListView) findViewById(R.id.actionView);
-//		actionsList = new ArrayList<Map<String, String>>();
-//		populateActionsList();
-//		
-//		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
-//		actionsListView.setAdapter(myAdapter);
-//		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
 		progress = new ProgressDialog(this);
 		progress.setTitle("Učitavanje podataka...");
 		
@@ -144,10 +134,7 @@ public class MainActivity extends Activity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-//						t.setText(text);
-						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
-						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
-						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+						//Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
 						setData(text);
 						parseJSONData();
 						initializeList();
@@ -157,8 +144,20 @@ public class MainActivity extends Activity {
 		}.start();	
 	}
 	
-	public String getMyText() {
-		return t.getText().toString();
+	public void reportError(final String text) {
+		new Thread() {
+			public void run() {
+				MainActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						progress.dismiss();
+						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}.start();	
 	}
 	
 	private void initializeList() {
