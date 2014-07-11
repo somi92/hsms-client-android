@@ -20,10 +20,10 @@ public class HSMSClient extends Activity implements Runnable {
 //	private static String METHOD_NAME = "listAllActions";
 //	private static String URL = "http://192.168.1.181/HSMSWebService/index.php";
 	
-	private static String SOAP_ACTION = "http://somi92.student.elab.fon.bg.ac.rs/soap/ActionList/listAllActions";
-	private static String NAMESPACE = "http://somi92.student.elab.fon.bg.ac.rs/soap/ActionList/";
+	private static String SOAP_ACTION = "http://www.somi92.student.elab.fon.bg.ac.rs/soap/ActionList/listAllActions";
+	private static String NAMESPACE = "http://www.somi92.student.elab.fon.bg.ac.rs/soap/ActionList/";
 	private static String METHOD_NAME = "listAllActions";
-	private static String URL = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
+	private static String URL = "http://www.somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php";
 	
 //	private static String SOAP_ACTION = "http://somi92.student.elab.fon.bg.ac.rs/HSMSWebService/index.php#listAllActions";
 //	private static String NAMESPACE = "urn:ActionList";
@@ -83,11 +83,6 @@ public class HSMSClient extends Activity implements Runnable {
 			
 			if(result != null) {
 				JSONObject obj = new JSONObject(result.getProperty(0).toString());
-//				JSONArray a = obj.getJSONArray("action");
-//				for(int i=0; i<a.length(); i++) {
-//					JSONObject jo = (JSONObject) a.get(i);
-//					parent.setMyText(jo.toString(),(i+1));
-//				}
 				parent.receiveData(obj.toString());
 			} else {
 				parent.receiveData("SOAP respones: "+"NULL!"+" "+message);
