@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 
 		progress = new ProgressDialog(this);
 		progress.setTitle("Učitavanje podataka...");
+		progress.setMessage("");
 		
 		HSMSClient client = new HSMSClient(this);
 		Thread thr = new Thread(client);
