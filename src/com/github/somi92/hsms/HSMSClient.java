@@ -11,7 +11,6 @@ import java.util.Scanner;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.util.Log;
 
 public class HSMSClient extends Activity implements Runnable {
 	
