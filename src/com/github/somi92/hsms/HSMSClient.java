@@ -1,23 +1,23 @@
 package com.github.somi92.hsms;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.util.Scanner;
 
 import org.json.JSONObject;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.util.Log;
 
 public class HSMSClient extends Activity implements Runnable {
 	
-	private static String SOAP_ACTION = "http://192.168.1.181/soap/ActionList/listAllActions";
-	private static String NAMESPACE = "http://192.168.1.181/soap/ActionList/";
-	private static String METHOD_NAME = "listAllActions";
-	private static String URL = "http://192.168.1.181/HSMSWebService/index.php";
+//	private static String URL = "http://192.168.1.181/HSMSWebService/listAllActions";
+	private static String URL = "http://www.somi92.student.elab.fon.bg.ac.rs/HSMSWebService/listAllActions";
+
 	
 	private MainActivity parent;
 	
@@ -33,6 +33,7 @@ public class HSMSClient extends Activity implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
+<<<<<<< HEAD
 		SoapObject soapRequest = new SoapObject(NAMESPACE,METHOD_NAME);
 		
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -56,30 +57,50 @@ public class HSMSClient extends Activity implements Runnable {
 			// TODO: handle exception
 			parent.receiveData(e.getMessage()+" EXC");
 		}
+=======
+		HttpURLConnection conn = null;
+		JSONObject obj = null;
+>>>>>>> 520372c933e67aef28f3acebf7ddc6bdefe01a3f
 		
 		try {
-			SoapObject result = (SoapObject)envelope.bodyIn;
+			URL url = new URL(URL);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(10000);
+			conn.setReadTimeout(10000);
 			
-			if(result != null) {
-				JSONObject obj = new JSONObject(result.getProperty(0).toString());
-//				JSONArray a = obj.getJSONArray("action");
-//				for(int i=0; i<a.length(); i++) {
-//					JSONObject jo = (JSONObject) a.get(i);
-//					parent.setMyText(jo.toString(),(i+1));
-//				}
-				parent.receiveData(obj.toString());
+			int statusCode = conn.getResponseCode();
+			if(statusCode != HttpURLConnection.HTTP_OK) {
+				parent.reportError("Greška. Aplikacija ne može da preuzme podatke. HTTP odgovor: "+statusCode);
 			} else {
-				parent.receiveData("SOAP respones: "+"NULL!");
+				InputStream in = new BufferedInputStream(conn.getInputStream());
+				obj = new JSONObject(getResponseText(in));
+				parent.receiveData(obj.toString());
 			}
 			
+<<<<<<< HEAD
 			Log.e("dump Request: " ,androidHttpTransport.requestDump);
 			Log.e("dump response: " ,androidHttpTransport.responseDump);
 			
+=======
+		} catch(SocketTimeoutException e) {
+			parent.reportError("Greška. Konekcija je istekla. Poruka sistema: "+e.getMessage());
+		} catch(IOException e) {
+			parent.reportError("Greška. Poruka sistema: "+e.getMessage());
+>>>>>>> 520372c933e67aef28f3acebf7ddc6bdefe01a3f
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			parent.receiveData(e.getMessage()+" Error");
+			parent.reportError("Greška. Poruka sistema: "+e.getMessage());
+		} finally {
+			if(conn != null) {
+				conn.disconnect();
+			}
 		}
+	}
+	
+	private static String getResponseText(InputStream in) {
+		Scanner scan = new Scanner(in);
+		String s = scan.useDelimiter("\\A").next();
+		scan.close();
+	    return s;
 	}
 
 }
