@@ -33,34 +33,8 @@ public class HSMSClient extends Activity implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-<<<<<<< HEAD
-		SoapObject soapRequest = new SoapObject(NAMESPACE,METHOD_NAME);
-		
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		envelope.implicitTypes = true;
-		envelope.setOutputSoapObject(soapRequest);
-		
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
-		androidHttpTransport.debug = true;
-		
-		try {
-			androidHttpTransport.call(SOAP_ACTION, envelope);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			parent.receiveData(e.getMessage()+" IO");
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			parent.receiveData(e.getMessage()+" XML");
-		} catch (Exception e) {
-			// TODO: handle exception
-			parent.receiveData(e.getMessage()+" EXC");
-		}
-=======
 		HttpURLConnection conn = null;
 		JSONObject obj = null;
->>>>>>> 520372c933e67aef28f3acebf7ddc6bdefe01a3f
 		
 		try {
 			URL url = new URL(URL);
@@ -77,16 +51,10 @@ public class HSMSClient extends Activity implements Runnable {
 				parent.receiveData(obj.toString());
 			}
 			
-<<<<<<< HEAD
-			Log.e("dump Request: " ,androidHttpTransport.requestDump);
-			Log.e("dump response: " ,androidHttpTransport.responseDump);
-			
-=======
 		} catch(SocketTimeoutException e) {
 			parent.reportError("Greška. Konekcija je istekla. Poruka sistema: "+e.getMessage());
 		} catch(IOException e) {
 			parent.reportError("Greška. Poruka sistema: "+e.getMessage());
->>>>>>> 520372c933e67aef28f3acebf7ddc6bdefe01a3f
 		} catch (Exception e) {
 			parent.reportError("Greška. Poruka sistema: "+e.getMessage());
 		} finally {
