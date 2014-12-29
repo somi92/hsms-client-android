@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,16 +32,21 @@ public class MainActivity extends Activity {
 	private List<Map<String, String>> actionsList;
 	private ProgressDialog progress;
 	
+	private HSMSClient client;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		PreferenceManager.setDefaultValues(this, "hsms", MODE_PRIVATE, R.xml.preferences, false);
 
 		progress = new ProgressDialog(this);
 		progress.setTitle("Učitavanje podataka...");
 		progress.setMessage("");
 		
-		HSMSClient client = new HSMSClient(this);
+		client = new HSMSClient(this);
+		client.setAction("load");
 		Thread thr = new Thread(client);
 		progress.show();
 		thr.start();
@@ -54,7 +60,7 @@ public class MainActivity extends Activity {
 		try {
 			JSONObject main = new JSONObject(this.data);
 			if(main != null) {
-				JSONArray array = main.getJSONArray("action");
+				JSONArray array = main.getJSONArray("actions");
 				if(array != null) {
 					actionsArray = new JSONObject[array.length()];
 					for(int i=0; i<array.length(); i++) {
@@ -82,11 +88,17 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 			case R.id.action_refresh: {
 //				this.recreate();
+				this.client.setAction("load");
 				Intent intent = getIntent();
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 				finish();
 				startActivity(intent);
 				overridePendingTransition(0,0);
+				return true;
+			}
+			case R.id.settings_action: {
+//				this.recreate();
+				startActivity(new Intent(this, PrefActivity.class));
 				return true;
 			}
 			default:
@@ -107,16 +119,18 @@ public class MainActivity extends Activity {
 	private HashMap<String, String> createAction(JSONObject obj) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		try {
+			String id = obj.getString("id");
 			String desc = obj.getString("desc");
-			String num = obj.getString("num");
+			String num = obj.getString("number");
 			String price = obj.getString("price");
-			String org = obj.getString("org");
+			String org = obj.getString("organisation");
 			String web = obj.getString("web");
 			
+			map.put("id", id);
 			map.put("desc", desc);
-			map.put("num", num);
+			map.put("number", num);
 			map.put("price", price);
-			map.put("org", org);
+			map.put("organisation", org);
 			map.put("web", web);
 			
 		} catch (JSONException e) {
@@ -161,12 +175,28 @@ public class MainActivity extends Activity {
 		}.start();	
 	}
 	
+	public void reportMessage(final String text) {
+		new Thread() {
+			public void run() {
+				MainActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						progress.dismiss();
+						Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}.start();	
+	}
+	
 	private void initializeList() {
 		actionsListView = (ListView) findViewById(R.id.actionView);
 		actionsList = new ArrayList<Map<String, String>>();
 		populateActionsList();
 		
-		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","num","price","org","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
+		myAdapter = new SimpleAdapter(this, actionsList, R.layout.list_item, new String[] {"desc","number","price","organisation","web"}, new int[] {R.id.description, R.id.num_box, R.id.price, R.id.organization, R.id.website});
 		actionsListView.setAdapter(myAdapter);
 		progress.dismiss();
 		
@@ -182,7 +212,9 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				
 				try {
-					Toast.makeText(MainActivity.this, actionsArray[arg2].getString("num")+" "+actionsArray[arg2].getString("price")+" - "+actionsArray[arg2].getString("desc"), Toast.LENGTH_SHORT).show();
+					client.setAction("donate", Integer.parseInt(actionsArray[arg2].getString("id")));
+					new Thread(client).start();
+					Toast.makeText(MainActivity.this, actionsArray[arg2].getString("id")+" "+actionsArray[arg2].getString("number")+" "+actionsArray[arg2].getString("price")+" - "+actionsArray[arg2].getString("desc"), Toast.LENGTH_SHORT).show();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

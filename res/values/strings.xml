@@ -4,5 +4,12 @@
     <string name="app_name">Humanitarni SMS</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_refresh">Osveži</string>
+    
+    <string name="pref_settings">Podešavanja</string>
+    <string name="pref_email">Vaša email adresa</string>
+    <string name="pref_host_address">IP adresa servisa</string>
+    <string name="pref_host_address_summary">Podesite adresu servera na kome se nalazi HSMS servis</string>
+    <string name="pref_currency_title">Izaberite valutu</string>
+    <string name="pref_currency_summary">Valute u kojoj se prikazuju cene poruka</string>
 
 </resources>
