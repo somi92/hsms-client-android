@@ -8,11 +8,18 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Button;
 
 public class HSMSClient extends Activity implements Runnable {
 	
@@ -49,6 +56,8 @@ public class HSMSClient extends Activity implements Runnable {
 			load();
 		if(this.action.equals("donate"))
 			donate(this.id);
+		if(this.action.equals("register"))
+			register();
 	}
 	
 	private void load() {
@@ -111,7 +120,8 @@ public class HSMSClient extends Activity implements Runnable {
 			} else {
 				InputStream in = new BufferedInputStream(conn.getInputStream());
 				obj = new JSONObject(getResponseText(in));
-				parent.reportMessage("Donacija uspešno registrovana. Hvala!");
+//				parent.reportMessage("Donacija uspešno registrovana. Hvala!");
+				parent.reportMessage(obj.toString());
 			}
 			
 		} catch(SocketTimeoutException e) {
@@ -124,6 +134,35 @@ public class HSMSClient extends Activity implements Runnable {
 			if(conn != null) {
 				conn.disconnect();
 			}
+		}
+	}
+	
+	public void register() {
+		SharedPreferences prefs = parent.getSharedPreferences("hsms", MODE_PRIVATE);
+		String ip = prefs.getString("hostAddress", "192.168.1.181");
+		String email = prefs.getString("email", "milos@milos.com");
+		String name = prefs.getString("name", "Milos Stojanovic");
+		
+		 HttpClient httpClient = new DefaultHttpClient();
+         HttpPost post = new HttpPost("http://"+ip+"/HSMS-MS/public/service/registerDonator");
+         post.setHeader("content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+         JSONObject dato = new JSONObject();
+         
+         try {
+        	 dato.put("email", email); 
+             dato.put("name", name);
+             
+             StringEntity entity = new StringEntity("email="+email+"&name="+name);
+             post.setEntity(entity);
+             
+             HttpResponse resp = httpClient.execute(post);
+             String respStr = EntityUtils.toString(resp.getEntity());
+             
+             parent.reportMessage(respStr);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 	

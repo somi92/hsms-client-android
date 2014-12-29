@@ -9,6 +9,11 @@
             android:title="@string/pref_email" />
         
         <EditTextPreference
+            android:key="name"
+            android:defaultValue="Milos Stojanovic"
+            android:title="@string/pref_name" />
+        
+        <EditTextPreference
             android:key="hostAddress"
             android:summary="@string/pref_host_address_summary"
             android:title="@string/pref_host_address" />

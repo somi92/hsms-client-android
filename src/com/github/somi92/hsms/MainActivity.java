@@ -18,7 +18,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ public class MainActivity extends Activity {
 	private ListView actionsListView;
 	private SimpleAdapter myAdapter;
 	private List<Map<String, String>> actionsList;
+	private Button register;
 	private ProgressDialog progress;
 	
 	private HSMSClient client;
@@ -44,6 +47,17 @@ public class MainActivity extends Activity {
 		progress = new ProgressDialog(this);
 		progress.setTitle("Učitavanje podataka...");
 		progress.setMessage("");
+		
+		register = (Button) findViewById(R.id.register_user);
+		register.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				client.setAction("register");
+				new Thread(client).start();
+			}
+		});
 		
 		client = new HSMSClient(this);
 		client.setAction("load");

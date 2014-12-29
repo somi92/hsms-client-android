@@ -7,6 +7,7 @@
     
     <string name="pref_settings">Podešavanja</string>
     <string name="pref_email">Vaša email adresa</string>
+    <string name="pref_name">Vaše ime i prezime</string>
     <string name="pref_host_address">IP adresa servisa</string>
     <string name="pref_host_address_summary">Podesite adresu servera na kome se nalazi HSMS servis</string>
     <string name="pref_currency_title">Izaberite valutu</string>
